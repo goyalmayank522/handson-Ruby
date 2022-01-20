@@ -113,7 +113,7 @@ class BSTree
     if print
       print "#{root_node.data} "
     end
-    @inorder_str += root_node.data + " "
+    @inorder_str += root_node.data.to_s + " "
     print_in(root_node.right, print)
   end
   
@@ -124,7 +124,7 @@ class BSTree
     if print
       print "#{root_node.data} "
     end
-    @preorder_str += root_node.data + " "
+    @preorder_str += root_node.data.to_s + " "
     print_pre(root_node.left, print)
     print_pre(root_node.right, print)
   end
@@ -138,7 +138,7 @@ class BSTree
     if print
       print "#{root_node.data} "
     end
-    @postorder_str += root_node.data + " "
+    @postorder_str += root_node.data.to_s + " "
   end
   
   def print_level(root_node = self.root, print = true)
@@ -152,7 +152,7 @@ class BSTree
       if print
         print "#{temp_node.data} "
       end
-      @levelorder_str += temp_node.data + " "
+      @levelorder_str += temp_node.data.to_s + " "
       if temp_node.left
         queue.push(temp_node.left)
       end
@@ -269,23 +269,34 @@ puts "Enter 2 to insert elements using file into BST."
 initial_input = gets.chomp.to_i
 if initial_input == 2
   array = File.read("input_data.txt").split(",").map(&:strip)
-  array.each{|ele| tree.insert_node(ele)}
+  for i in array do
+    ele = i.to_i
+    if tree.search_element(ele) == false
+      tree.insert_node(ele)
+    end
+  end
   puts "The file (input_data.txt) elements are successfully inserted into the BST!."
   puts "\n"
  
 elsif initial_input == 1
   puts "Enter comma seperated elements to be inserted into BST: "
   array = gets.chomp.split(",")
-  array.each{|ele| tree.insert_node(ele)}
+  for i in array do
+    ele = i.to_i
+    if tree.search_element(ele) == false
+      tree.insert_node(ele)
+    end
+  end
   puts "The given elements are successfully inserted into BST!"
   puts "\n"
 end
 
+puts "--> Select any operation you wanna perform on this BST:"
+puts "->Enter 1 to print largest element from BST\n->Enter 2 to print smallest element from BST\n->Enter 3 to print various traversals of BST"
+puts "->Enter 4 to search any element into BST\n->Enter 5 to delete any element from BST\n->Enter 6 to print all root to leaf possible paths\n->Enter 7 to insert a element into BST\n->Enter 0 to save and exit\n"
+
 loop do
- puts "--> Select any operation you wanna perform on this BST:"
- puts "Enter 1 to print largest element from BST\nEnter 2 to print smallest element from BST\nEnter 3 to print various traversals of BST"
- puts "Enter 4 to search any element into BST\nEnter 5 to delete any element from BST\nEnter 6 to print all root to leaf possible paths\nEnter 0 to save and exit\n"
- 
+ print "==> "
  input = gets.chomp.to_i
  
  if input == 1
@@ -325,6 +336,17 @@ loop do
  elsif input == 6
    puts "Printing all paths from root to leaf:- "
    tree.print_root_to_leaf()
+   puts "\n"
+ 
+ elsif input == 7
+   puts "Enter a element you wanna insert into BST:- "
+   ele = gets.chomp.to_i
+   if tree.search_element(ele) == false
+     tree.insert_node(ele)
+     puts "The element is successfully inserted into BST!"
+   else
+     puts "The element already exists into BST!"
+   end
    puts "\n"
    
  elsif input == 0
