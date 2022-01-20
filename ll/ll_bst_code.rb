@@ -40,9 +40,7 @@ class Linked_list
       return false
     end
     while temp != nil
-      if temp.data.to_i == ele
-        return true
-      end
+      return true if temp.data.to_i == ele
       temp = temp.right
     end
     return false
@@ -79,13 +77,9 @@ class Linked_list
         puts "The Linked List is empty!"
       end
     else
-      if print
-        puts "The Linked List elements are:- "
-      end
+      puts "The Linked List elements are:- " if print
       while temp
-        if print
-          print "#{temp.data} "
-        end
+        print "#{temp.data} " if print
         @linked_list_orig += temp.data.to_s + " "
         temp = temp.right
       end
@@ -168,10 +162,7 @@ class BSTree
       end
       temp = "The largest element in the BST is #{root_node.data}."
     end
-    if print
-      puts temp
-      puts "\n"
-    end
+    puts "#{temp}\n\n" if print
     @large_ele << temp
   end
   
@@ -186,20 +177,15 @@ class BSTree
       end
       temp = "The smallest element in the BST is #{root_node.data}."
     end
-    if print
-      puts temp
-      puts "\n"
-    end
+    puts "#{temp}\n\n" if print
     @small_ele << temp
   end
       
   def search_element_util(temp_root, ele)
     if temp_root == nil
       return false
-      #puts "Element is not found in the BST"
     elsif temp_root.data == ele
       return true
-      #puts "Element is found"
     elsif ele < temp_root.data
       search_element_util(temp_root.left, ele)
     else
@@ -212,66 +198,44 @@ class BSTree
   end  
   
   def print_in(root_node = self.root, print = true)
-    if root_node == nil
-      return 
-    end
+    return if root_node == nil
     print_in(root_node.left, print)
-    if print
-      print "#{root_node.data} "
-    end
-    @inorder_str += root_node.data + " "
+    print "#{root_node.data} " if print
+    @inorder_str += root_node.data.to_s + " "
     print_in(root_node.right, print)
   end
   
   def print_pre(root_node = self.root, print = true)
-    if root_node == nil
-      return 
-    end
-    if print
-      print "#{root_node.data} "
-    end
-    @preorder_str += root_node.data + " "
+    return if root_node == nil
+    print "#{root_node.data} " if print
+    @preorder_str += root_node.data.to_s + " "
     print_pre(root_node.left, print)
     print_pre(root_node.right, print)
   end
   
   def print_post(root_node = self.root, print = true)
-    if root_node == nil
-      return 
-    end
+    return if root_node == nil
     print_post(root_node.left, print)
     print_post(root_node.right, print)
-    if print
-      print "#{root_node.data} "
-    end
-    @postorder_str += root_node.data + " "
+    print "#{root_node.data} " if print
+    @postorder_str += root_node.data.to_s + " "
   end
   
   def print_level(root_node = self.root, print = true)
-    if root_node == nil
-      return 
-    end
+    return if root_node == nil
     queue = Queue.new
     queue.push(root_node)
     while queue.size > 0
       temp_node = queue.pop
-      if print
-        print "#{temp_node.data} "
-      end
-      @levelorder_str += temp_node.data + " "
-      if temp_node.left
-        queue.push(temp_node.left)
-      end
-      if temp_node.right
-        queue.push(temp_node.right)
-      end
+      print "#{temp_node.data} " if print
+      @levelorder_str += temp_node.data.to_s + " "
+      queue.push(temp_node.left) if temp_node.left
+      queue.push(temp_node.right) if temp_node.right
     end
   end
   
   def print_root_to_leaf_util(arr, root_node)
-    if !root_node
-      return
-    end
+    return if !root_node
     if !root_node.left and !root_node.right
       for ele in arr do
         print "#{ele} "
@@ -375,18 +339,31 @@ def start_bst()
   puts "Enter 2 to insert elements using file into BST."
   puts "Enter anything else to go to main menu."
   initial_input = gets.chomp.to_i
+  
   if initial_input == 2
     array = File.read("input_data.txt").split(",").map(&:strip)
-    array.each{|ele| tree.insert_node(ele)}
+    for i in array do
+      ele = i.to_i
+      if tree.search_element(ele) == false
+        tree.insert_node(ele)
+      end
+    end
+    #array.each{|ele| tree.insert_node(ele)}
     puts "The file (input_data.txt) elements are successfully inserted into the BST!."
     puts "\n"
  
   elsif initial_input == 1
     puts "Enter comma seperated elements to be inserted into BST: "
     array = gets.chomp.split(",")
-    for ele in array do
-      tree.insert_node(ele)
+    for i in array do
+      ele = i.to_i
+      if tree.search_element(ele) == false
+        tree.insert_node(ele)
+      end
     end
+    #for ele in array do
+      #tree.insert_node(ele)
+    #end
     puts "The given elements are successfully inserted into BST!"
     puts "\n"
     
@@ -394,12 +371,12 @@ def start_bst()
     puts "Going to main menu..."
     return
   end
-
+  
+  puts "--> Select any operation you wanna perform on this BST:"
+  puts "->Enter 1 to print largest element from BST\n->Enter 2 to print smallest element from BST\n->Enter 3 to print various traversals of BST"
+  puts "->Enter 4 to search any element into BST\n->Enter 5 to delete any element from BST\n->Enter 6 to print all root to leaf possible paths\n->Enter 7 to insert a element into BST\n->Enter 0 to save and exit\n"
   loop do
-    puts "--> Select any operation you wanna perform on this BST:"
-    puts "*Enter 1 to print largest element from BST\n*Enter 2 to print smallest element from BST\n*Enter 3 to print various traversals of BST"
-    puts "*Enter 4 to search any element into BST\n*Enter 5 to delete any element from BST\n*Enter 6 to print all root to leaf possible paths\n*Enter 7 to insert a element into BST\n*Enter 0 to save and exit\n"
- 
+    print "==> "
     input = gets.chomp.to_i
  
     if input == 1
@@ -442,9 +419,15 @@ def start_bst()
    
    elsif input == 7
      puts "Enter a element you wanna insert into BST:- "
-     ele = gets.chomp
-     tree.insert_node(ele)
-     puts "The element is successfully inserted into BST!"
+     ele = gets.chomp.to_i
+     if tree.search_element(ele) == false
+       tree.insert_node(ele)
+       puts "The element is successfully inserted into BST!"
+     else
+       puts "The element already exists into BST!"
+     end
+     #tree.insert_node(ele)
+     #puts "The element is successfully inserted into BST!"
      puts "\n"
      
     elsif input == 0
@@ -457,9 +440,9 @@ end
 
 def start_ll()
   linked_list = Linked_list.new()
-  puts "Enter 1 to manually insert elements into LL."
-  puts "Enter 2 to insert elements using file into LL."
-  puts "Enter anything else to go to main menu."
+  puts "->Enter 1 to manually insert elements into LL."
+  puts "->Enter 2 to insert elements using file into LL."
+  puts "->Enter anything else to go to main menu."
   initial_input = gets.chomp.to_i
   if initial_input == 2
     array = File.read("input_data.txt").split(",").map(&:strip)
@@ -478,15 +461,16 @@ def start_ll()
     return
   end 
   
-  loop do
-    puts "--> Select any operation you wanna perform on Linked List:"
-    puts "*Enter 1 to add new node into LL."
-    puts "*Enter 2 to search any element into LL."
-    puts "*Enter 3 to delete any node from LL."
-    puts "*Enter 4 to reverse the LL."
-    puts "*Enter 5 to print the LL."
-    puts "*Enter 0 to save and exit."
+  puts "--> Select any operation you wanna perform on Linked List:"
+  puts "->Enter 1 to add new node into LL."
+  puts "->Enter 2 to search any element into LL."
+  puts "->Enter 3 to delete any node from LL."
+  puts "->Enter 4 to reverse the LL."
+  puts "->Enter 5 to print the LL."
+  puts "->Enter 0 to save and exit."
     
+  loop do
+    print "==> "
     input = gets.chomp.to_i
     
     if input == 1
@@ -531,10 +515,11 @@ end
 
 
 loop do
-  puts "Choose which DS you wanna use:-"
-  puts "Enter 1 to select Linked List."
-  puts "Enter 2 to select Binary Search Tree."
-  puts "Enter anything else to exit."
+  puts "--> Choose which DS you wanna use:-"
+  puts "->Enter 1 to select Linked List."
+  puts "->Enter 2 to select Binary Search Tree."
+  puts "->Enter anything else to exit."
+  print "==> "
   start = gets.chomp.to_i
   if start == 1
     start_ll()
